@@ -1,11 +1,64 @@
 import React, { Component } from "react";
-import "./App.css";
-import ReadString from "./ReadString";
-import SetString from "./SetString";
-import Contract from "./ContractCreator";
+import { withStyles } from "@material-ui/core/styles";
+import ListSubheader from "@material-ui/core/ListSubheader";
+import List from "@material-ui/core/List";
+import Grid from "@material-ui/core/Grid";
+import ContractDisplay from "./ContractDisplay";
+// import ReadString from "./ReadString";
+// import SetString from "./SetString";
+import ContractCreator from "./ContractCreator";
+
+import Button from "@material-ui/core/Button";
+
+import trade_json from "./contracts/Trade.json";
+const truffleTrade = require("truffle-contract")(trade_json);
+
+const styles = theme => ({
+  app: {
+    display: "flex",
+    flexDirection: "row"
+  },
+  button: {
+    margin: theme.spacing.unit
+  },
+  root: {
+    width: "100%",
+    maxWidth: 500,
+    marginTop: "15px",
+    backgroundColor: theme.palette.background.primary
+  }
+});
 
 class App extends Component {
-  state = { loading: true, drizzleState: null };
+  state = {
+    loading: true,
+    drizzleState: null,
+    tradeAddresses: [],
+    selectedTrade: "",
+    buyer: "",
+    seller: "",
+    quantity: "",
+    price: ""
+  };
+
+  addAddress = address => {
+    this.setState({ tradeAddresses: [address, ...this.state.tradeAddresses] });
+  };
+
+  handleClick = async input => {
+    await this.setState({ selectedTrade: input });
+    this.renderContract(input);
+  };
+
+  renderContract = async address => {
+    const { drizzle } = this.props;
+    const provider = drizzle.web3.givenProvider;
+    truffleTrade.setProvider(provider);
+    const contract = await truffleTrade.at(address);
+    const buyer = await contract.buyer.call();
+    const seller = await contract.seller.call();
+    this.setState({ buyer, seller });
+  };
 
   componentDidMount() {
     const { drizzle } = this.props;
@@ -28,9 +81,25 @@ class App extends Component {
   }
 
   render() {
+    const { classes } = this.props;
+    const { selectedTrade, buyer, seller, quantity, price } = this.state;
+    const contractButtons = this.state.tradeAddresses.map(address => {
+      return (
+        <Button
+          onClick={() => this.handleClick(address)}
+          variant="outlined"
+          color="primary"
+          className={classes.button}
+          key={address}
+          id={address}
+        >
+          {address}
+        </Button>
+      );
+    });
     if (this.state.loading) return "Loading Drizzle...";
     return (
-      <div className="App">
+      <div className={classes.app}>
         {/* <ReadString
           drizzle={this.props.drizzle}
           drizzleState={this.state.drizzleState}
@@ -39,13 +108,32 @@ class App extends Component {
           drizzle={this.props.drizzle}
           drizzleState={this.state.drizzleState}
         /> */}
-        <Contract
-          drizzle={this.props.drizzle}
-          drizzleState={this.state.drizzleState}
+        <Grid>
+          <ContractCreator
+            drizzle={this.props.drizzle}
+            drizzleState={this.state.drizzleState}
+            addAddress={this.addAddress}
+            tradeAddresses={this.state.tradeAddresses}
+          />
+          <List
+            component="nav"
+            subheader={
+              <ListSubheader component="div">Deployed Contracts</ListSubheader>
+            }
+            className={classes.root}
+          >
+            {contractButtons}
+          </List>
+        </Grid>
+        <ContractDisplay
+          selectedTrade={selectedTrade}
+          buyer={buyer}
+          seller={seller}
         />
+        <Grid />
       </div>
     );
   }
 }
 
-export default App;
+export default withStyles(styles)(App);

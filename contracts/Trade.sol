@@ -1,7 +1,6 @@
 pragma solidity ^0.5.0;
 
 contract Trade {
-    
     address public seller;
     address public buyer;
     uint quantity;
@@ -26,14 +25,12 @@ contract Trade {
     }
 }
 
-
-contract TradeCreator {
-    Trade[] arrayOfTrades;
-    function addTrade(address _buyer, address _seller, uint _quantity, uint _price) public{
-        Trade newTrade = new Trade(_buyer, _seller, _quantity, _price);
-        arrayOfTrades.push(newTrade);
+contract TradeRepo {
+    address[] tradeRepo;
+    function addTrade(address _contractAddress) public {
+        tradeRepo.push(_contractAddress);
     }
-    function getTrades() public view returns (Trade[] memory) {
-        return arrayOfTrades;
+    function getTrades() public view returns (address[] memory) {
+        return tradeRepo;
     }
 }
