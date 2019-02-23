@@ -4,6 +4,10 @@ import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
+import JSONTrade from "./contracts/Trade.json";
+
+const truffleTrade = require("truffle-contract")(JSONTrade);
+
 const styles = theme => ({
   container: {
     display: "flex",
@@ -40,49 +44,53 @@ class ContractCreator extends React.Component {
       quantity: "",
       price: "",
       ctrAddresses: [],
-      currentTrades: []
+      tradeAddresses: []
     };
   }
   handleChange = name => event => {
     this.setState({ [name]: event.target.value });
   };
   handleClick = async () => {
-    const { drizzle, drizzleState } = this.props;
-    const TradeCreator = drizzle.contracts.TradeCreator;
-
-    const stackId = await TradeCreator.methods["addTrade"].cacheSend(
-      this.state.buyer,
-      this.state.seller,
-      this.state.quantity,
-      this.state.price,
-      {
-        from: drizzleState.accounts[0]
-      }
-    );
+    this.addContract();
   };
-  showContracts = () => {
-    const { Trade } = this.props.drizzleState.contracts;
-    const currentTrades = this.state.ctrAddresses.map(address =>
-      Trade.at(address)
-    );
-    this.setState({ currentTrades });
+
+  addContract = () => {
+    const { drizzle, drizzleState } = this.props;
+    // const ctrAddresses = await TradeCreator.getTrades[this.state.dataKey];
+    const provider = drizzle.web3.givenProvider;
+    truffleTrade.setProvider(provider);
+    truffleTrade
+      .new(
+        this.state.buyer,
+        this.state.seller,
+        this.state.quantity,
+        this.state.price,
+        { from: drizzleState.accounts[0] }
+      )
+      .then(res => {
+        this.setState({
+          tradeAddresses: [res.address, ...this.state.tradeAddresses]
+        });
+      })
+      .then(async () => {
+        const contract = await truffleTrade.at(this.state.tradeAddresses[0]);
+        alert(`Contract ${contract.address} is on the blockchain`);
+      });
   };
 
   componentDidMount() {
-    const { drizzle } = this.props;
-    const TradeCreator = drizzle.contracts.TradeCreator;
-    // let drizzle know we want to watch the `myString` method
-    const dataKey = TradeCreator.methods["getTrades"].cacheCall();
-    // save the `dataKey` to local component state for later reference
-    this.setState({ dataKey });
+    // const { drizzle } = this.props;
+    // const TradeCreator = drizzle.contracts.TradeCreator;
+    // // let drizzle know we want to watch the `getTrades` method
+    // const dataKey = TradeCreator.methods["getTrades"].cacheCall();
+    // // save the `dataKey` to local component state for later reference
+    // this.setState({ dataKey });
   }
 
   render() {
     const { classes } = this.props;
-    // const { TradeCreator } = this.props.drizzleState.contracts;
-    // const ctrAddresses = Array.from(TradeCreator.getTrades[this.state.dataKey]);
-    // // this.setState({ ctrAddresses });
-    // // // this.showContracts();
+    // const { TradeCreator, Trade } = this.props.drizzleState.contracts;
+    // const ctrAddresses = TradeCreator.getTrades[this.state.dataKey];
 
     return (
       <div>
@@ -124,6 +132,14 @@ class ContractCreator extends React.Component {
             Create
           </Button>
         </form>
+        <Button
+          variant="contained"
+          color="primary"
+          className={classes.button}
+          onClick={this.addContract}
+        >
+          Testing
+        </Button>
       </div>
     );
   }
