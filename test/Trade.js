@@ -9,6 +9,28 @@ contract("Trade", accounts => {
 
     assert.equal(state, "created");
   });
+  it("should create a contract with balance of 'zero", async () => {
+    const myTrade = await Trade.deployed();
+
+    const balance = await myTrade.getBalance();
+
+    assert.equal(balance, 0);
+  });
+  it("should have a call to return tradeSummary", async () => {
+    const params = [
+      "0x8ea35ac607d9183378062e73fe159d6846175c0e",
+      "0x74fdcdc9d698008100cbffa7696a5e5b809ace0e",
+      200,
+      1000
+    ];
+    const myTrade = await Trade.deployed();
+
+    const info = await myTrade.tradeSummary.call();
+    assert.equal(params[0], info.buyer.toLowerCase());
+    assert.equal(params[1], info.seller.toLowerCase());
+    assert.equal(params[2], info.quantity.words[0]);
+    assert.equal(params[3], info.price.words[0]);
+  });
 });
 
 // contract("Trade Repo", accounts => {
