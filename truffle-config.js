@@ -43,11 +43,10 @@ module.exports = {
     // options below to some value.
     //
     development: {
-      host: "localhost", // Localhost (default: none)
-      port: 8545, // Standard Ethereum port (default: none)
-      network_id: "*" // Any network (default: none)
+      host: "localhost",
+      port: 7545,
+      network_id: "5777"
     }
-
     // Another network with more advanced options...
     // advanced: {
     // port: 8777,             // Custom port
@@ -57,7 +56,6 @@ module.exports = {
     // from: <address>,        // Account to send txs from (default: accounts[0])
     // websockets: true        // Enable EventEmitter interface for web3 (default: false)
     // },
-
     // Useful for deploying to a public network.
     // NB: It's important to wrap the provider as a function.
     // ropsten: {
@@ -68,7 +66,6 @@ module.exports = {
     // timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
     // skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
     // },
-
     // Useful for private networks
     // private: {
     // provider: () => new HDWalletProvider(mnemonic, `https://network.io`),
