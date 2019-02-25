@@ -10,8 +10,8 @@ import Typography from "@material-ui/core/Typography";
 
 const styles = {
   card: {
-    minWidth: 750,
-    height: 200,
+    minWidth: 600,
+    height: 250,
     marginLeft: "20px",
     marginTop: "60px"
   },
@@ -28,7 +28,32 @@ class ContractDisplay extends React.Component {
   handleChange = name => event => {
     this.setState({ [name]: event.target.value });
   };
-  handleClick = name => {};
+  handleClick = () => {
+    this.fundContract();
+  };
+  fundContract = async () => {
+    const {
+      drizzle,
+      drizzleState,
+      selectedTrade,
+      quantity,
+      price
+    } = this.props;
+    await drizzle.web3.eth
+      .sendTransaction({
+        from: drizzleState.accounts[0],
+        to: selectedTrade,
+        value: drizzle.web3.utils.toWei((quantity * price).toString(), "ether")
+      })
+      .then(res => {
+        if (res.status) alert("Contract is funded.");
+      })
+      .catch(err => {
+        if (err.message.includes("Only buyer can call this")) {
+          alert("Only buyer can seed contract.");
+        }
+      });
+  };
 
   componentDidMount() {}
 
@@ -39,7 +64,9 @@ class ContractDisplay extends React.Component {
       buyer,
       seller,
       quantity,
-      price
+      price,
+      balance,
+      contractState
     } = this.props;
 
     return (
@@ -50,15 +77,13 @@ class ContractDisplay extends React.Component {
           </Typography>
           <Typography component="p">Buyer: {buyer}</Typography>
           <Typography component="p">Seller: {seller}</Typography>
-          <Typography component="p">
-            Quantity: {this.state.quantity || ""}
-          </Typography>
-          <Typography component="p">
-            Price per Unit: {this.state.price || ""}
-          </Typography>
+          <Typography component="p">Quantity: {quantity}</Typography>
+          <Typography component="p">Price per Unit: {price}</Typography>
+          <Typography component="p">Contract Balance: {balance}</Typography>
+          <Typography component="p">Status: {contractState}</Typography>
         </CardContent>
         <CardActions>
-          <Button size="small" color="primary">
+          <Button size="small" color="primary" onClick={this.handleClick}>
             Fund (Buyer)
           </Button>
         </CardActions>

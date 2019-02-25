@@ -38,7 +38,15 @@ class App extends Component {
     buyer: "",
     seller: "",
     quantity: "",
-    price: ""
+    price: "",
+    balance: "",
+    contractState: ""
+  };
+  stateEnumMap = {
+    0: "created",
+    1: "funded",
+    2: "in transit",
+    3: "completed"
   };
 
   addAddress = address => {
@@ -55,9 +63,16 @@ class App extends Component {
     const provider = drizzle.web3.givenProvider;
     truffleTrade.setProvider(provider);
     const contract = await truffleTrade.at(address);
-    const buyer = await contract.buyer.call();
-    const seller = await contract.seller.call();
-    this.setState({ buyer, seller });
+    const tradeSummary = await contract.tradeSummary.call();
+    const balance = await contract.getBalance();
+    this.setState({
+      buyer: tradeSummary.buyer,
+      seller: tradeSummary.seller,
+      quantity: tradeSummary.quantity.toNumber(),
+      price: tradeSummary.price.toNumber(),
+      balance: drizzle.web3.utils.fromWei(balance.toString(), "ether"),
+      contractState: this.stateEnumMap[tradeSummary.state.toString()]
+    });
   };
 
   componentDidMount() {
@@ -82,7 +97,15 @@ class App extends Component {
 
   render() {
     const { classes } = this.props;
-    const { selectedTrade, buyer, seller, quantity, price } = this.state;
+    const {
+      selectedTrade,
+      buyer,
+      seller,
+      quantity,
+      price,
+      balance,
+      contractState
+    } = this.state;
     const contractButtons = this.state.tradeAddresses.map(address => {
       return (
         <Button
@@ -126,9 +149,15 @@ class App extends Component {
           </List>
         </Grid>
         <ContractDisplay
+          drizzle={this.props.drizzle}
+          drizzleState={this.state.drizzleState}
           selectedTrade={selectedTrade}
           buyer={buyer}
           seller={seller}
+          price={price}
+          quantity={quantity}
+          balance={balance}
+          contractState={contractState}
         />
         <Grid />
       </div>
