@@ -1,12 +1,15 @@
 pragma solidity ^0.5.0;
 
 contract Trade {
+
+    enum tradingState { created, funded, transit, completed}
+
     struct TradeSummary {
         address seller;
         address buyer;
         uint quantity;
         uint price;
-        string state; 
+        tradingState state; 
     }
 
     TradeSummary public tradeSummary;
@@ -16,10 +19,10 @@ contract Trade {
         tradeSummary.seller = _seller;
         tradeSummary.quantity = _quantity;
         tradeSummary.price = _price;
-        tradeSummary.state = "created";
+        tradeSummary.state = tradingState.created;
     }
     
-    function getState() public view returns (string memory){
+    function getState() public view returns (tradingState){
         return tradeSummary.state;
     }
     
@@ -30,6 +33,11 @@ contract Trade {
     modifier onlyBuyer() {
         require(msg.sender == tradeSummary.buyer,"Only buyer can call this.");
         _;
+    }
+    function () external payable onlyBuyer{
+        uint receivable = tradeSummary.price * tradeSummary.quantity;
+        if (address(this).balance == receivable * 1000000000000000000)
+            tradeSummary.state = tradingState.funded;
     }
 }
 
