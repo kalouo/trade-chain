@@ -3,10 +3,10 @@ import { withStyles } from "@material-ui/core/styles";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import List from "@material-ui/core/List";
 import Grid from "@material-ui/core/Grid";
-import ContractDisplay from "./ContractDisplay";
+import ContractDisplay from "./ContractDisplay.jsx";
 // import ReadString from "./ReadString";
 // import SetString from "./SetString";
-import ContractCreator from "./ContractCreator";
+import ContractCreator from "./ContractCreator.jsx";
 
 import Button from "@material-ui/core/Button";
 
