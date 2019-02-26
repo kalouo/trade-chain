@@ -63,12 +63,3 @@ contract Trade {
     }
 }
 
-contract TradeRepo {
-    address[] tradeRepo;
-    function addTrade(address _contractAddress) public {
-        tradeRepo.push(_contractAddress);
-    }
-    function getTrades() public view returns (address[] memory) {
-        return tradeRepo;
-    }
-}
