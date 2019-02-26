@@ -38,6 +38,7 @@ class ContractCreator extends React.Component {
     this.state = {
       buyer: "",
       seller: "",
+      carrier: "",
       quantity: "",
       price: "",
       tradeAddresses: []
@@ -58,6 +59,7 @@ class ContractCreator extends React.Component {
       .new(
         this.state.buyer,
         this.state.seller,
+        this.state.carrier,
         this.state.quantity,
         this.state.price,
         { from: drizzleState.accounts[0] }
@@ -101,6 +103,13 @@ class ContractCreator extends React.Component {
             label="Seller"
             className={classes.textField}
             onChange={this.handleChange("seller")}
+            margin="normal"
+          />
+          <TextField
+            id="standard-name"
+            label="Carrier"
+            className={classes.textField}
+            onChange={this.handleChange("carrier")}
             margin="normal"
           />
           <TextField
