@@ -72,16 +72,6 @@ class ContractCreator extends React.Component {
         alert(`Contract ${contract.address} is on the blockchain`);
       });
   };
-  // .then(res => {
-  //   this.setState({
-  //     tradeAddresses: [res.address, ...this.state.tradeAddresses]
-  //   });
-  // })
-  // .then(async () => {
-  //   const contract = await truffleTrade.at(this.state.tradeAddresses[0]);
-  //   alert(`Contract ${contract.address} is on the blockchain`);
-  //   return contract.address;
-  // })
 
   componentDidMount() {}
 

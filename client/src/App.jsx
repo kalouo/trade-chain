@@ -37,6 +37,7 @@ class App extends Component {
     selectedTrade: "",
     buyer: "",
     seller: "",
+    carrier: "",
     quantity: "",
     price: "",
     balance: "",
@@ -68,6 +69,7 @@ class App extends Component {
     this.setState({
       buyer: tradeSummary.buyer,
       seller: tradeSummary.seller,
+      carrier: tradeSummary.carrier,
       quantity: tradeSummary.quantity.toNumber(),
       price: tradeSummary.price.toNumber(),
       balance: drizzle.web3.utils.fromWei(balance.toString(), "ether"),
@@ -101,6 +103,7 @@ class App extends Component {
       selectedTrade,
       buyer,
       seller,
+      carrier,
       quantity,
       price,
       balance,
@@ -154,6 +157,7 @@ class App extends Component {
           selectedTrade={selectedTrade}
           buyer={buyer}
           seller={seller}
+          carrier={carrier}
           price={price}
           quantity={quantity}
           balance={balance}
