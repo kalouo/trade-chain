@@ -66,11 +66,11 @@ class ContractCreator extends React.Component {
       )
       .then(res => {
         this.props.addAddress(res.address);
-      })
-      .then(async () => {
-        const contract = await truffleTrade.at(this.props.tradeAddresses[0]);
-        alert(`Contract ${contract.address} is on the blockchain`);
       });
+    // .then(async () => {
+    //   const contract = await truffleTrade.at(this.props.tradeAddresses[0]);
+    //   alert(`Contract ${contract.address} is on the blockchain`);
+    // });
   };
 
   componentDidMount() {}

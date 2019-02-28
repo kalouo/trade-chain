@@ -7,9 +7,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
-import indigo from "@material-ui/core/colors/indigo";
 
 import trade_json from "./contracts/Trade.json";
 const truffleTrade = require("truffle-contract")(trade_json);
@@ -59,19 +57,18 @@ const styles = theme => ({
 });
 
 class ContractDisplay extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      rows: []
+      account: ""
     };
-    this.id = 0;
   }
-
-  createData(variable, value) {
-    this.id += 1;
-    const id = this.id;
-    return { id, value };
-  }
+  tick = () => {
+    this.setState({
+      account: this.props.drizzle.web3.eth.accounts.givenProvider
+        .selectedAddress
+    });
+  };
 
   handleChange = name => event => {
     this.setState({ [name]: event.target.value });
@@ -95,20 +92,19 @@ class ContractDisplay extends React.Component {
 
   fundContract = async () => {
     const { drizzle, selectedTrade, quantity, price } = this.props;
-    await drizzle.web3.eth
-      .sendTransaction({
-        from: drizzle.web3.eth.accounts.givenProvider.selectedAddress,
-        to: selectedTrade,
-        value: drizzle.web3.utils.toWei((quantity * price).toString(), "ether")
-      })
-      .then(res => {
-        if (res.status) alert("Contract is funded.");
-      })
-      .catch(err => {
-        if (err.message.includes("Only buyer can call this")) {
-          alert("Only buyer can seed contract.");
-        }
-      });
+    await drizzle.web3.eth.sendTransaction({
+      from: drizzle.web3.eth.accounts.givenProvider.selectedAddress,
+      to: selectedTrade,
+      value: drizzle.web3.utils.toWei((quantity * price).toString(), "ether")
+    });
+    // .then(res => {
+    //   if (res.status) alert("Contract is funded.");
+    // })
+    // .catch(err => {
+    //   if (err.message.includes("Only buyer can call this")) {
+    //     alert("Only buyer can seed contract.");
+    //   }
+    // });
   };
 
   dispatchCargo = async () => {
@@ -132,26 +128,11 @@ class ContractDisplay extends React.Component {
   };
 
   componentDidMount() {
-    const {
-      selectedTrade,
-      buyer,
-      seller,
-      quantity,
-      price,
-      balance,
-      contractState
-    } = this.props;
-    this.setState({
-      rows: [
-        this.createData("Contract Address", selectedTrade),
-        this.createData("Buyer", buyer),
-        this.createData("Seller", seller),
-        this.createData("Quantity", quantity),
-        this.createData("Price Per Unit", price),
-        this.createData("Contract Balance", balance),
-        this.createData("Status", contractState)
-      ]
-    });
+    this.interval = setInterval(() => this.tick(), 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   render() {
@@ -164,27 +145,29 @@ class ContractDisplay extends React.Component {
       quantity,
       price,
       balance,
-      contractState,
-      drizzle
+      contractState
     } = this.props;
+
+    const addressMapping = {
+      [buyer.toLowerCase()]: "BUYER",
+      [carrier.toLowerCase()]: "CARRIER",
+      [seller.toLowerCase()]: "SELLER"
+    };
 
     return (
       <div className={classes.root}>
-        <div className={classes.currentAddress}>
-          {/* <Button variant="contained" size="small" color="secondary">
-            Current Address:
-            {
-              addressMapping[
-                drizzle.web3.eth.accounts.givenProvider.selectedAddress.toString()
-              ]
-            }
-          </Button> */}
-        </div>
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
               <CustomTableCell>Contract Display</CustomTableCell>
-              <CustomTableCell align="right" />
+              <CustomTableCell align="right">
+                <Button variant="contained">
+                  Connected: {addressMapping[this.state.account]}
+                </Button>
+                {/* {" "}
+                Connected:
+                {addressMapping[this.state.account]} */}
+              </CustomTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
