@@ -1,10 +1,16 @@
-### IDEA
-
-... WIP
-
 ### ARCHITECTURE
 
-<div j="center">
+The project is being developed with the Truffle Suite.
+
+- _Ganache_ provides the development blockchain.
+- _Truffle_ provides a "one-stop shop" framework for smart contract development including functionality such as network management, automated testing and compilation of Solidity code.
+- _Drizzle_ provides a collection of front-end libraries that facilitate creating dapp front-ends. It encapsulates _Web3_ functionality and your contract methods.
+
+Otherwise, _React_ was used to create the front-end and _Metamask_ is used as the Ethereum client.
+
+A simplified idea of the architecture can ve visualized as follows:
+
+<div>
 <img alt="Architecture" src ="./client/assets/image.png" width="800">
 </div>
 
