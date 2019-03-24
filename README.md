@@ -16,6 +16,12 @@ With a background in international trade, I decided to try my hand at prototypin
 
 This (d)app implements the basic flow of a blockchain-enabled trade, namely: the seller can only claim payment from buyer once a third party has validated the seller's performance on the blockchain.
 
+Future features:
+
+- Automated tests
+- Authentication
+- Adapting UI/UX and smart contract(s) to real world use case.
+
 ### ARCHITECTURE
 
 The project is being developed with the Truffle Suite.
