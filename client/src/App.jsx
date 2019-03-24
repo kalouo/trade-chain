@@ -4,8 +4,6 @@ import ListSubheader from "@material-ui/core/ListSubheader";
 import List from "@material-ui/core/List";
 import Grid from "@material-ui/core/Grid";
 import ContractDisplay from "./ContractDisplay.jsx";
-// import ReadString from "./ReadString";
-// import SetString from "./SetString";
 import ContractCreator from "./ContractCreator.jsx";
 
 import Button from "@material-ui/core/Button";
@@ -13,20 +11,20 @@ import Button from "@material-ui/core/Button";
 import trade_json from "./contracts/Trade.json";
 const truffleTrade = require("truffle-contract")(trade_json);
 
-const styles = theme => ({
+const styles = (theme) => ({
   app: {
     display: "flex",
-    flexDirection: "row"
+    flexDirection: "row",
   },
   button: {
-    margin: theme.spacing.unit
+    margin: theme.spacing.unit,
   },
   root: {
     width: "100%",
     maxWidth: 500,
     marginTop: "15px",
-    backgroundColor: theme.palette.background.primary
-  }
+    backgroundColor: theme.palette.background.primary,
+  },
 });
 
 class App extends Component {
@@ -41,25 +39,25 @@ class App extends Component {
     quantity: "",
     price: "",
     balance: "",
-    contractState: ""
+    contractState: "",
   };
   stateEnumMap = {
     0: "created",
     1: "funded",
     2: "in transit",
-    3: "completed"
+    3: "completed",
   };
 
-  addAddress = address => {
+  addAddress = (address) => {
     this.setState({ tradeAddresses: [address, ...this.state.tradeAddresses] });
   };
 
-  handleClick = async input => {
+  handleClick = async (input) => {
     await this.setState({ selectedTrade: input });
     this.renderContract(input);
   };
 
-  renderContract = async address => {
+  renderContract = async (address) => {
     const { drizzle } = this.props;
     const provider = drizzle.web3.givenProvider;
     truffleTrade.setProvider(provider);
@@ -73,7 +71,7 @@ class App extends Component {
       quantity: tradeSummary.quantity.toNumber(),
       price: tradeSummary.price.toNumber(),
       balance: drizzle.web3.utils.fromWei(balance.toString(), "ether"),
-      contractState: this.stateEnumMap[tradeSummary.state.toString()]
+      contractState: this.stateEnumMap[tradeSummary.state.toString()],
     });
   };
 
@@ -107,9 +105,9 @@ class App extends Component {
       quantity,
       price,
       balance,
-      contractState
+      contractState,
     } = this.state;
-    const contractButtons = this.state.tradeAddresses.map(address => {
+    const contractButtons = this.state.tradeAddresses.map((address) => {
       return (
         <Button
           onClick={() => this.handleClick(address)}
