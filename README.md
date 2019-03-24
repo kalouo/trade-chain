@@ -4,8 +4,8 @@
 
 ### ARCHITECTURE
 
-<div>
-<img alt="Architecture" src ="./client/assets/image.png" width="400px">
+<div j="center">
+<img alt="Architecture" src ="./client/assets/image.png" width="800">
 </div>
 
 ### SET UP
