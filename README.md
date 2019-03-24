@@ -1,3 +1,7 @@
+### IDEA
+
+... WIP
+
 ### ARCHITECTURE
 
 The project is being developed with the Truffle Suite.
