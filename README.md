@@ -71,4 +71,4 @@ Notes for usage:
 - Enter buyer, seller and carrier as **Ethereum addresses**.
 - Once the contract is created, you can click on it to render it on the table on the right.
 
-_This project was undertaken as a student at [Code Chrysalis](https://www.codechrysalis.io/)_
+_This project was undertaken in my time as a student at [Code Chrysalis](https://www.codechrysalis.io/)_
