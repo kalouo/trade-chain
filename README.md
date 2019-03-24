@@ -4,7 +4,9 @@
 
 ### ARCHITECTURE
 
-![alt text]("./client/assets/image.png)
+<div>
+<img alt="Architecture" src ="./client/assets/image.png" width="400px">
+</div>
 
 ### SET UP
 
