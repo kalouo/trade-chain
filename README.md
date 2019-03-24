@@ -1,6 +1,20 @@
 ### IDEA
 
-... WIP
+Managing risk remains a cornerstone of importing or exporting goods - and some key risks revolve around trust: will the buyer pay and will the seller deliver?
+
+Today, managing these risks relies on an ecoysystem of intermediaries and layers of physical paperwork. Processes are manual and slow as a result.
+
+Blockchain - as a "technology of trust" - holds the following possibilities in the context of international trade:
+
+- The ability to digitally hold the title to assets.
+- The ability to digitally track inspections and certifications.
+- The ability to digitally record contractual arrangements and execute them alogrithmically.
+
+More background on the use case can be found [here](https://www.bcg.com/publications/2018/reality-check-blockchain-commodity-trading.aspx).
+
+With a background in international trade, I decided to try my hand at prototyping a smart contract suited for this use case.
+
+This (d)app implements the basic flow of a blockchain-enabled trade, namely: the seller can only claim payment from buyer once a third party has validated the seller's performance on the blockchain.
 
 ### ARCHITECTURE
 
@@ -50,3 +64,5 @@ Notes for usage:
 
 - Enter buyer, seller and carrier as **Ethereum addresses**.
 - Once the contract is created, you can click on it to render it on the table on the right.
+
+_This project was undertaken as a student at [Code Chrysalis](https://www.codechrysalis.io/)_
